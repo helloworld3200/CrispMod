@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -59,8 +62,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CrispMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo Starting post-build script, CMD stage
+
+set ScriptFile="$(SolutionDir)Scripts\PostBuild1.ps1"
+
+REM DO NOT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Remove that " before the SolutionDir arg.
+REM It may look out of place, but for some reason, when its NOT there, it creates
+REM a trailing " on the END of the parameter.
+
+REM Maybe because the strings before it are broken? The SolutionDir var itself is broken?
+REM Anyway this is needless to check, because everything is already done in PS now.
+REM No need to spend any more time on this - ****just don't touch it.****
+
+REM Also: by the time we get to PS stage all params should be 100%25 normal and standard.
+REM So essentially we want to contain any and all jank to this CMD stage ONLY.
+
+powershell.exe -ExecutionPolicy Bypass -NoProfile -File %25ScriptFile%25 -SolutionDir "$(SolutionDir)
+
+echo Finished post-build script, CMD stage</PostBuildEvent>
+  </PropertyGroup>
 </Project>
